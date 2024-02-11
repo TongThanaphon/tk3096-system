@@ -12,7 +12,7 @@ export const MainSidebar = () => {
       </div>
       <Separator className='h-[2px] w-3/4 mx-auto rounded-md bg-[#e1e2e5] dark:bg-neutral-700' />
       <ScrollArea className='flex-1 w-full'>
-        <MainSidebarItem label='task management' path='/task-management' />
+        <MainSidebarItem label='tasks management' path='/tasks-management' />
       </ScrollArea>
       <Separator className='h-[2px] w-3/4 mx-auto rounded-md bg-[#e1e2e5] dark:bg-neutral-700' />
       <SignOutBtn />

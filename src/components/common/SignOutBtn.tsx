@@ -39,10 +39,10 @@ export const SignOutBtn = () => {
       <Button
         size='sm'
         variant='ghost'
-        className='hover:text-zinc-400'
+        className='hover:text-zinc-400 '
         onClick={handleSignOut}
       >
-        <ExitIcon className='w-4 h-4 mr-2' />
+        <ExitIcon className='w-5 h-5 mr-2' />
         Sign out
       </Button>
     </div>
