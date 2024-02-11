@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Open_Sans } from 'next/font/google'
 
+import { Toaster } from '@/components/ui/toaster'
+
 import { ThemeProvider } from '@/providers/ThemeProvider'
 
 import { cn } from '@/lib/utils'
@@ -29,6 +31,7 @@ const RootLayout = ({
           storageKey='tk3096-system'
         >
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

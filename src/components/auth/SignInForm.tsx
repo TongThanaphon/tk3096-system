@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/use-toast'
 
 import { signInWithEmail } from '@/lib/firebase/auth'
 
@@ -22,6 +23,8 @@ import { signInSchema } from '@/schemas/sign-in'
 
 export const SignInForm = () => {
   const router = useRouter()
+
+  const { toast } = useToast()
 
   const form = useForm({
     resolver: zodResolver(signInSchema),
@@ -42,9 +45,17 @@ export const SignInForm = () => {
 
       if (res) {
         router.push('/')
+      } else {
+        toast({
+          title: 'Sign in',
+          description: 'Fail to sing int',
+        })
       }
     } catch (error) {
-      console.log('[SIGN_IN]: ', error)
+      toast({
+        title: 'Something went wrong',
+        description: `${error}`,
+      })
     }
   }
 
