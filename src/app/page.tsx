@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button'
 
-export default function Home() {
+const HomePage = () => {
   return (
     <main>
-      <Button>Test</Button>
+      <Button>Test 22</Button>
       <Button variant='outline'>Test</Button>
     </main>
   )
 }
+
+export default HomePage

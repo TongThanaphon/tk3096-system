@@ -1,7 +1,16 @@
+import { redirect } from 'next/navigation'
+
 import { SignInForm } from '@/components/auth/SignInForm'
 import { Separator } from '@/components/ui/separator'
+import { isUserAuthenticated } from '@/lib/firebase/config/firebase-admin'
 
-const SignInPage = () => {
+const SignInPage = async () => {
+  const user = await isUserAuthenticated()
+
+  if (user) {
+    redirect('/')
+  }
+
   return (
     <div className='h-full flex justify-center items-center'>
       <div className='rounded-md bg-white dark:bg-[#262626] px-7 py-10 w-1/4 shadow-md'>
