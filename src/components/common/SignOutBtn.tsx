@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { ExitIcon } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
+
+import { useToast } from '@/hooks/useToast'
 
 import { signOut } from '@/lib/firebase/auth'
 

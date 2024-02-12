@@ -15,7 +15,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
+
+import { useToast } from '@/hooks/useToast'
 
 import { signInWithEmail } from '@/lib/firebase/auth'
 
@@ -112,8 +113,9 @@ export const SignInForm = () => {
 
           <div className='pt-8'>
             <Button
+              variant='primary'
               disabled={loading || !isDirty}
-              className='capitalize w-full bg-indigo-500 hover:bg-indigo-400 text-white'
+              className='capitalize w-full'
               type='submit'
             >
               sign in

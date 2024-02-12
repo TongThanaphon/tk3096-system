@@ -1,6 +1,11 @@
 'use client'
 
-import { ArchiveIcon, ChevronDownIcon, CubeIcon } from '@radix-ui/react-icons'
+import {
+  ArchiveIcon,
+  ChevronDownIcon,
+  CubeIcon,
+  FileIcon,
+} from '@radix-ui/react-icons'
 
 import {
   DropdownMenu,
@@ -8,8 +13,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
+import { useModal } from '@/hooks/useModal'
 
 export const TaskManagementHeader = () => {
+  const { onOpen } = useModal()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className='focus:outline-none'>
@@ -19,13 +27,20 @@ export const TaskManagementHeader = () => {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-[205px] text-sm font-medium text-neutral-400 space-y-1'>
-        <DropdownMenuItem className='cursor-pointer px-3 py-2'>
-          Create Category
+        <DropdownMenuItem
+          className='cursor-pointer px-3 py-2'
+          onClick={() => onOpen('createEpic')}
+        >
+          Create Epic
           <CubeIcon className='ml-auto h-5 w-5' />
         </DropdownMenuItem>
         <DropdownMenuItem className='cursor-pointer px-3 py-2'>
-          Create Task
+          Create Dashboard
           <ArchiveIcon className='ml-auto h-5 w-5' />
+        </DropdownMenuItem>
+        <DropdownMenuItem className='cursor-pointer px-3 py-2'>
+          Create Task
+          <FileIcon className='ml-auto h-5 w-5' />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { MainSidebar } from '@/components/common/MainSidebar'
 
 import { ThemeProvider } from '@/providers/ThemeProvider'
+import { ModalProvider } from '@/providers/ModalProvider'
 
 import { cn } from '@/lib/utils'
 
@@ -38,6 +39,7 @@ const RootLayout = ({
             <main className='md:pl-[150px] h-full'>{children}</main>
           </div>
           <Toaster />
+          <ModalProvider />
         </ThemeProvider>
       </body>
     </html>
