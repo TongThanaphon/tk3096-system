@@ -25,12 +25,14 @@ export const SignOutBtn = () => {
         toast({
           title: 'Sign out',
           description: 'Fail to sign out',
+          variant: 'destructive',
         })
       }
     } catch (error) {
       toast({
         title: 'Something went wrong',
         description: `${error}`,
+        variant: 'destructive',
       })
     }
   }

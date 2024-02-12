@@ -24,18 +24,27 @@ export const FileUpload = (props: FileUploadProps) => {
 
   const onDrop = useCallback(
     async (acceptFiles: File[]) => {
-      const url = await uploadFile(acceptFiles[0], storagePath)
+      try {
+        const url = await uploadFile(acceptFiles[0], storagePath)
 
-      if (url) {
-        setPreview(url)
-        onChange(url)
-      } else {
-        setPreview('')
-        onChange('')
+        if (url) {
+          setPreview(url)
+          onChange(url)
+        } else {
+          setPreview('')
+          onChange('')
 
+          toast({
+            title: 'Upload file',
+            description: 'Fail to upload file',
+            variant: 'destructive',
+          })
+        }
+      } catch (error) {
         toast({
-          title: 'Upload file',
-          description: 'Fail to upload file',
+          title: 'Something went wrong',
+          description: `${error}`,
+          variant: 'destructive',
         })
       }
     },

@@ -50,12 +50,14 @@ export const SignInForm = () => {
         toast({
           title: 'Sign in',
           description: 'Fail to sing int',
+          variant: 'destructive',
         })
       }
     } catch (error) {
       toast({
         title: 'Something went wrong',
         description: `${error}`,
+        variant: 'destructive',
       })
     }
   }

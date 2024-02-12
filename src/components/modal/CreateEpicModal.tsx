@@ -58,14 +58,23 @@ export const CreateEpicModal = () => {
   const handleSubmitCreateEpic = async (
     values: z.infer<typeof createEpicSchema>,
   ) => {
-    const id = await addDocument('epics', values)
+    try {
+      const id = await addDocument('epics', values)
 
-    if (id) {
-      router.push(`/task-managements/${id}`)
-    } else {
+      if (id) {
+        router.push(`/task-managements/${id}`)
+      } else {
+        toast({
+          title: 'Create epic',
+          description: 'Fail to create epic',
+          variant: 'destructive',
+        })
+      }
+    } catch (error) {
       toast({
-        title: 'Create epic',
-        description: 'Fail to create epic',
+        title: 'Something went wrong',
+        description: `${error}`,
+        variant: 'destructive',
       })
     }
   }
