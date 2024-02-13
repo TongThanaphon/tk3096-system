@@ -1,97 +1,78 @@
 'use client'
 
 import * as z from 'zod'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
-
-import { APIResponse } from '@/types'
-
-import { useModal } from '@/hooks/useModal'
-import { useToast } from '@/hooks/useToast'
+import { useForm } from 'react-hook-form'
 
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogFooter,
+  DialogTitle,
+  DialogHeader,
 } from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
-  FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  FormField,
 } from '@/components/ui/form'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { FileUpload } from '@/components/common/FileUpload'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
-import { createEpicSchema } from '@/schemas/task-management'
+import { createBoardSchema } from '@/schemas/task-management'
+import { useModal } from '@/hooks/useModal'
 
-import { TASK_MANAGEMENT_STORAGE } from '@/lib/firebase/config/constant'
+const OPTIONS = [
+  {
+    id: 'epic-1',
+    name: 'Epic 1',
+  },
+  {
+    id: 'epic-2',
+    name: 'Epic 2',
+  },
+  {
+    id: 'epic-3',
+    name: 'Epic 3',
+  },
+]
 
-export const CreateEpicModal = () => {
-  const router = useRouter()
-
-  const { type, open, onClose } = useModal()
-
-  const { toast } = useToast()
+export const CreateBoardModal = () => {
+  const { type, onClose, open } = useModal()
 
   const form = useForm({
-    resolver: zodResolver(createEpicSchema),
+    resolver: zodResolver(createBoardSchema),
     defaultValues: {
       name: '',
+      epic: '',
       description: '',
-      imageUrl: '',
     },
   })
 
+  const isOpen = open && type === 'createBoard'
   const loading = form.formState.isSubmitting
-
-  const isOpen = open && type === 'createEpic'
 
   const handleClose = () => {
     form.reset()
     onClose()
   }
 
-  const handleSubmitCreateEpic = async (
-    values: z.infer<typeof createEpicSchema>,
+  const handleSubmitCreateBoard = async (
+    values: z.infer<typeof createBoardSchema>,
   ) => {
-    try {
-      const res = await fetch('/api/task-management/epics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      })
-
-      const resBody = (await res.json()) as APIResponse<string>
-
-      if (res.ok && resBody.success) {
-        form.reset()
-        onClose()
-        router.refresh()
-      } else {
-        toast({
-          title: 'Create epic',
-          description: 'Fail to create epic',
-          variant: 'destructive',
-        })
-      }
-    } catch (error) {
-      toast({
-        title: 'Something went wrong',
-        description: `${error}`,
-        variant: 'destructive',
-      })
-    }
+    console.log(values)
   }
 
   return (
@@ -99,53 +80,66 @@ export const CreateEpicModal = () => {
       <DialogContent className='bg-white text-black p-0 overflow-hidden'>
         <DialogHeader className='pt-8 px-6'>
           <DialogTitle className='text-2xl text-center font-bold'>
-            Create Epic
+            Create Board
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
-            Creat your epic with name, an image and description. You can awalys
+            Create your board with name, epic and description. You can awalys
             change it later.
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form
+            onSubmit={form.handleSubmit(handleSubmitCreateBoard)}
             className='space-y-8'
-            onSubmit={form.handleSubmit(handleSubmitCreateEpic)}
           >
             <div className='space-y-8 px-6'>
-              <FormField
-                control={form.control}
-                name='imageUrl'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <FileUpload
-                        value={field.value}
-                        onChange={field.onChange}
-                        storagePath={TASK_MANAGEMENT_STORAGE}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
               <FormField
                 control={form.control}
                 name='name'
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className='uppercase text-sm font-bold text-secondary/70'>
-                      Epic Name <span className='text-rose-500'>*</span>
+                      Board Name <span className='text-rose-500'>*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
                         disabled={loading}
                         className='bg-zinc-300/50 border-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                        placeholder='Your epic name'
+                        placeholder='Your board name'
                         {...field}
                       />
                     </FormControl>
                     <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name='epic'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className='uppercase text-sm font-bold text-secondary/70'>
+                      Epic <span className='text-rose-500'>*</span>
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={OPTIONS[0].id}
+                    >
+                      <FormControl>
+                        <SelectTrigger className='bg-zinc-300/50 border-none focus-visible:ring-0 focus-visible:ring-offset-0'>
+                          <SelectValue placeholder='Select the epic' />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {OPTIONS.map((option) => (
+                          <SelectItem key={option.id} value={option.id}>
+                            {option.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </FormItem>
                 )}
               />

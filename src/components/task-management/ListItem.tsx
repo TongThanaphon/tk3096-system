@@ -1,8 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-
 import { Pencil1Icon, ArchiveIcon, PlusIcon } from '@radix-ui/react-icons'
+
+import { ModalType, useModal } from '@/hooks/useModal'
 
 import { ActionTooltip } from '@/components/common/ActionTooltip'
 
@@ -29,10 +30,12 @@ const epicIcon = (label: string, imageUrl?: string) => {
 export const ListItem = (props: ListItemProps) => {
   const { label, type, imageUrl } = props
 
-  const handleAction = (event: React.MouseEvent, action: string) => {
+  const { onOpen } = useModal()
+
+  const handleAction = (event: React.MouseEvent, action: ModalType) => {
     event.stopPropagation()
 
-    console.log(action)
+    onOpen(action)
   }
 
   return (
@@ -49,12 +52,12 @@ export const ListItem = (props: ListItemProps) => {
         {label}
       </div>
       <div className='ml-auto flex gap-3'>
-        <ActionTooltip label='edit' align='center'>
+        {/* <ActionTooltip label='edit' align='center'>
           <Pencil1Icon
             className='h-4 w-4'
             onClick={(e) => handleAction(e, `edit${type}`)}
           />
-        </ActionTooltip>
+        </ActionTooltip> */}
 
         {type === 'Epic' && (
           <ActionTooltip label='new' align='center'>

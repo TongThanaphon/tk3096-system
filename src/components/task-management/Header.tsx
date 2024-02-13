@@ -34,7 +34,10 @@ export const Header = () => {
           Create Epic
           <ArchiveIcon className='ml-auto h-5 w-5' />
         </DropdownMenuItem>
-        <DropdownMenuItem className='cursor-pointer px-3 py-2'>
+        <DropdownMenuItem
+          className='cursor-pointer px-3 py-2'
+          onClick={() => onOpen('createBoard')}
+        >
           Create Dashboard
           <DashboardIcon className='ml-auto h-5 w-5' />
         </DropdownMenuItem>

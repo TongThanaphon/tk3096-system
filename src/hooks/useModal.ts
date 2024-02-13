@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-export type ModalType = 'createEpic'
+export type ModalType = 'createEpic' | 'createBoard'
 
 interface ModalStore {
   type: ModalType | null
