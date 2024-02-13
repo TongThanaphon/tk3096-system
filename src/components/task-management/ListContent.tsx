@@ -11,6 +11,7 @@ import { TASK_MANAGEMENT_EPICS_COLLECTION } from '@/lib/firebase/config/constant
 
 export const ListContent = () => {
   const [epics, setEpics] = useState<TaskManagementEpic[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const { unsubscribe } = getEpics(
@@ -20,16 +21,25 @@ export const ListContent = () => {
       },
     )
 
+    const timeout = setTimeout(() => {
+      setLoading(false)
+    }, 800)
+
     return () => {
       unsubscribe()
+      timeout
     }
   }, [])
 
   return (
-    <div className='w-full px-3 py-2 flex flex-col gap-2'>
-      {epics.map((epic) => (
-        <CollapseItem key={epic.id} epic={epic} />
-      ))}
+    <div className='h-full w-full px-3 py-2 flex flex-col gap-2'>
+      {!loading &&
+        epics.map((epic) => <CollapseItem key={epic.id} epic={epic} />)}
+      {loading && (
+        <div className='mx-auto my-auto'>
+          <div>Loading...</div>
+        </div>
+      )}
     </div>
   )
 }
