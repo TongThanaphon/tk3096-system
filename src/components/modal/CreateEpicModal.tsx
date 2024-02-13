@@ -71,7 +71,8 @@ export const CreateEpicModal = () => {
 
       if (res.ok && resBody.success) {
         form.reset()
-        router.push(`/tasks-managements/${resBody.data}`)
+        onClose()
+        router.refresh()
       } else {
         toast({
           title: 'Create epic',

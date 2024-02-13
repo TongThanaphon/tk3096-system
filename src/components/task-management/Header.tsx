@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { useModal } from '@/hooks/useModal'
 
-export const TaskManagementHeader = () => {
+export const Header = () => {
   const { onOpen } = useModal()
 
   return (
@@ -26,7 +26,7 @@ export const TaskManagementHeader = () => {
           <ChevronDownIcon className='h-5 w-5 ml-auto' />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-[205px] text-sm font-medium text-neutral-400 space-y-1'>
+      <DropdownMenuContent className='w-[290px] text-sm font-medium text-neutral-400 space-y-1'>
         <DropdownMenuItem
           className='cursor-pointer px-3 py-2'
           onClick={() => onOpen('createEpic')}

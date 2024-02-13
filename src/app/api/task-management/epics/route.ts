@@ -5,17 +5,31 @@ import { APIResponse } from '@/types'
 
 import { createEpicSchema } from '@/schemas/task-management'
 
-import { addDocument } from '@/lib/firebase/config/firebase-admin'
+import {
+  addDocument,
+  getCurrentUser,
+} from '@/lib/firebase/config/firebase-admin'
 import { TASK_MANAGEMENT_EPICS_COLLECTION } from '@/lib/firebase/config/constant'
 
 export const POST = async (req: NextRequest) => {
   try {
     const body = (await req.json()) as z.infer<typeof createEpicSchema>
+    const user = await getCurrentUser()
+
+    if (!user) {
+      return NextResponse.json<APIResponse>(
+        {
+          success: false,
+          error: 'Unauthorized',
+        },
+        { status: 401 },
+      )
+    }
 
     const docId = await addDocument(body, TASK_MANAGEMENT_EPICS_COLLECTION)
 
     if (!docId) {
-      NextResponse.json<APIResponse>(
+      return NextResponse.json<APIResponse>(
         {
           success: false,
           error: 'Fail to add document',
