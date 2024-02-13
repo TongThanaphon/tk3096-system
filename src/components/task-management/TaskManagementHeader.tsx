@@ -3,8 +3,8 @@
 import {
   ArchiveIcon,
   ChevronDownIcon,
-  CubeIcon,
-  FileIcon,
+  FileTextIcon,
+  DashboardIcon,
 } from '@radix-ui/react-icons'
 
 import {
@@ -32,15 +32,15 @@ export const TaskManagementHeader = () => {
           onClick={() => onOpen('createEpic')}
         >
           Create Epic
-          <CubeIcon className='ml-auto h-5 w-5' />
-        </DropdownMenuItem>
-        <DropdownMenuItem className='cursor-pointer px-3 py-2'>
-          Create Dashboard
           <ArchiveIcon className='ml-auto h-5 w-5' />
         </DropdownMenuItem>
         <DropdownMenuItem className='cursor-pointer px-3 py-2'>
+          Create Dashboard
+          <DashboardIcon className='ml-auto h-5 w-5' />
+        </DropdownMenuItem>
+        <DropdownMenuItem className='cursor-pointer px-3 py-2'>
           Create Task
-          <FileIcon className='ml-auto h-5 w-5' />
+          <FileTextIcon className='ml-auto h-5 w-5' />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { SESSION_KEY } from '@/lib/firebase/config/session-key'
+import { SESSION_KEY } from '@/lib/firebase/config/constant'
 
 export const middleware = (req: NextRequest) => {
   const session = req.cookies.get(SESSION_KEY)

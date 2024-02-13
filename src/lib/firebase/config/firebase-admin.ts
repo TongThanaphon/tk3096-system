@@ -3,8 +3,9 @@ import 'server-only'
 import { cookies } from 'next/headers'
 import { getApps, cert, initializeApp } from 'firebase-admin/app'
 import { getAuth, SessionCookieOptions } from 'firebase-admin/auth'
+import { DocumentData, getFirestore } from 'firebase-admin/firestore'
 
-import { SESSION_KEY } from '@/lib/firebase/config/session-key'
+import { SESSION_KEY } from '@/lib/firebase/config/constant'
 
 const config = {
   credential: cert(
@@ -17,6 +18,8 @@ export const app = !getApps().length
   : getApps()[0]
 
 export const auth = getAuth(app)
+
+export const db = getFirestore(app)
 
 export const getSession = async () => {
   try {
@@ -69,4 +72,15 @@ export const revokeAllSessions = async (session: string) => {
   const decodedIdToken = await auth.verifySessionCookie(session)
 
   return await auth.revokeRefreshTokens(decodedIdToken.uid)
+}
+
+export const addDocument = async (data: DocumentData, collection: string) => {
+  try {
+    const docRef = await db.collection(collection).add(data)
+
+    return docRef.id
+  } catch (error) {
+    console.log('[FIRESTORE] Fail to add document ', error)
+    return null
+  }
 }

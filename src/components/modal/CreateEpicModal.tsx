@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 
+import { APIResponse } from '@/types'
+
 import { useModal } from '@/hooks/useModal'
 import { useToast } from '@/hooks/useToast'
 
@@ -31,9 +33,7 @@ import { FileUpload } from '@/components/common/FileUpload'
 
 import { createEpicSchema } from '@/schemas/task-management'
 
-import { addDocument } from '@/lib/firebase/db'
-
-const STORAGE_PATH = 'task-management/epic'
+import { TASK_MANAGEMENT_STORAGE } from '@/lib/firebase/config/constant'
 
 export const CreateEpicModal = () => {
   const router = useRouter()
@@ -59,10 +59,19 @@ export const CreateEpicModal = () => {
     values: z.infer<typeof createEpicSchema>,
   ) => {
     try {
-      const id = await addDocument('epics', values)
+      const res = await fetch('/api/task-management/epics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
 
-      if (id) {
-        router.push(`/task-managements/${id}`)
+      const resBody = (await res.json()) as APIResponse<string>
+
+      if (res.ok && resBody.success) {
+        form.reset()
+        router.push(`/tasks-managements/${resBody.data}`)
       } else {
         toast({
           title: 'Create epic',
@@ -107,7 +116,7 @@ export const CreateEpicModal = () => {
                       <FileUpload
                         value={field.value}
                         onChange={field.onChange}
-                        storagePath={STORAGE_PATH}
+                        storagePath={TASK_MANAGEMENT_STORAGE}
                       />
                     </FormControl>
                   </FormItem>
