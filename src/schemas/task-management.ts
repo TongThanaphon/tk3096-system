@@ -12,7 +12,7 @@ export const createBoardSchema = z.object({
   name: z.string().min(1, {
     message: 'Name is required',
   }),
-  epic: z.string().min(1, {
+  epicId: z.string().min(1, {
     message: 'Epic is required',
   }),
   description: z.string(),

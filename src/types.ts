@@ -8,3 +8,10 @@ export interface TaskManagementEpic {
   imageUrl: string
   description: string
 }
+
+export interface TaskManagementBoard {
+  id: string
+  epicId: string
+  name: string
+  description: string
+}

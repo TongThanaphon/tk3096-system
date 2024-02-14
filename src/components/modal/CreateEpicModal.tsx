@@ -75,8 +75,7 @@ export const CreateEpicModal = () => {
       const resBody = (await res.json()) as APIResponse<string>
 
       if (res.ok && resBody.success) {
-        form.reset()
-        onClose()
+        handleClose()
         router.refresh()
       } else {
         toast({
