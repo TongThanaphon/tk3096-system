@@ -84,3 +84,18 @@ export const addDocument = async (data: DocumentData, collection: string) => {
     return null
   }
 }
+
+export const updateDocument = async (
+  id: string,
+  data: DocumentData,
+  collection: string,
+) => {
+  try {
+    await db.collection(collection).doc(id).update(data)
+
+    return true
+  } catch (error) {
+    console.log('[FIRESTORE] Fail to update document ', error)
+    return false
+  }
+}

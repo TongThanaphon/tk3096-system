@@ -36,15 +36,18 @@ export const ListItem = (props: ListItemProps) => {
   const label = type === 'Epic' ? (data as TaskManagementEpic).name : data.name
   const imageUrl =
     type === 'Epic' ? (data as TaskManagementEpic).imageUrl : undefined
+  const editType = type === 'Epic' ? 'editEpic' : 'editBoard'
 
-  const handleAction = (
-    event: React.MouseEvent,
-    action: ModalType,
-    data: ModalData,
-  ) => {
+  const handleAction = (event: React.MouseEvent, action: ModalType) => {
     event.stopPropagation()
 
-    onOpen(action, data)
+    if (editType === 'editEpic') {
+      onOpen(action, { epic: data as TaskManagementEpic })
+    } else if (editType === 'editBoard') {
+      onOpen(action, { board: data as TaskManagementBoard })
+    } else {
+      onOpen(action, { epic: data as TaskManagementEpic })
+    }
   }
 
   return (
@@ -61,22 +64,18 @@ export const ListItem = (props: ListItemProps) => {
         {label}
       </div>
       <div className='ml-auto flex gap-3'>
-        {/* <ActionTooltip label='edit' align='center'>
+        <ActionTooltip label='edit' align='center'>
           <Pencil1Icon
             className='h-4 w-4'
-            onClick={(e) => handleAction(e, `edit${type}`)}
+            onClick={(e) => handleAction(e, editType as ModalType)}
           />
-        </ActionTooltip> */}
+        </ActionTooltip>
 
         {type === 'Epic' && (
           <ActionTooltip label='new' align='center'>
             <PlusIcon
               className='h-4 w-4'
-              onClick={(e) =>
-                handleAction(e, 'createBoard', {
-                  epic: data as TaskManagementEpic,
-                })
-              }
+              onClick={(e) => handleAction(e, 'createBoard')}
             />
           </ActionTooltip>
         )}

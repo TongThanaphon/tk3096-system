@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import qs from 'query-string'
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -33,7 +34,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
-import { createBoardSchema } from '@/schemas/task-management'
+import { editBoardSchema } from '@/schemas/task-management'
 
 import { useModal } from '@/hooks/useModal'
 import { useToast } from '@/hooks/useToast'
@@ -42,7 +43,7 @@ import { getEpics } from '@/lib/firebase/db'
 
 import { TaskManagementEpic } from '@/types'
 
-export const CreateBoardModal = () => {
+export const EditBoardModal = () => {
   const router = useRouter()
 
   const [options, setOptions] = useState<TaskManagementEpic[]>([])
@@ -50,10 +51,10 @@ export const CreateBoardModal = () => {
   const { toast } = useToast()
   const { type, onClose, open, data } = useModal()
 
-  const isOpen = open && type === 'createBoard'
+  const isOpen = open && type === 'editBoard'
 
   const form = useForm({
-    resolver: zodResolver(createBoardSchema),
+    resolver: zodResolver(editBoardSchema),
     defaultValues: {
       name: '',
       epicId: options[0]?.id || '',
@@ -68,12 +69,15 @@ export const CreateBoardModal = () => {
     onClose()
   }
 
-  const handleSubmitCreateBoard = async (
-    values: z.infer<typeof createBoardSchema>,
+  const handleSubmitEditBoard = async (
+    values: z.infer<typeof editBoardSchema>,
   ) => {
     try {
-      const res = await fetch('/api/task-management/boards', {
-        method: 'POST',
+      const url = qs.stringifyUrl({
+        url: `/api/task-management/boards/${data?.board?.id}`,
+      })
+      const res = await fetch(url, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -85,8 +89,8 @@ export const CreateBoardModal = () => {
         router.refresh()
       } else {
         toast({
-          title: 'Create board',
-          description: 'Fail to create board',
+          title: 'Edit board',
+          description: 'Fail to edit board',
           variant: 'destructive',
         })
       }
@@ -110,8 +114,10 @@ export const CreateBoardModal = () => {
   }, [])
 
   useEffect(() => {
-    if (data?.epic) {
-      form.setValue('epicId', data.epic.id)
+    if (data?.board) {
+      form.setValue('name', data.board?.name)
+      form.setValue('epicId', data.board?.epicId)
+      form.setValue('description', data.board?.description)
     }
   }, [data, form])
 
@@ -120,17 +126,16 @@ export const CreateBoardModal = () => {
       <DialogContent className='bg-white text-black p-0 overflow-hidden'>
         <DialogHeader className='pt-8 px-6'>
           <DialogTitle className='text-2xl text-center font-bold'>
-            Create Board
+            Edit Board
           </DialogTitle>
           <DialogDescription className='text-center text-zinc-500'>
-            Create your board with name, epic and description. You can awalys
-            change it later.
+            Edit your board with name, epic and description.
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleSubmitCreateBoard)}
+            onSubmit={form.handleSubmit(handleSubmitEditBoard)}
             className='space-y-8'
           >
             <div className='space-y-8 px-6'>

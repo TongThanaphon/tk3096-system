@@ -20,10 +20,13 @@ export const ListContent = () => {
   useEffect(() => {
     const { unsubscribe } = getEpics((value) => {
       setEpics((prev) => {
-        const existingEpic = prev.find((epic) => epic.id === value.id)
+        const index = prev.findIndex((epic) => epic.id === value.id)
 
-        if (existingEpic) {
-          return prev
+        if (index !== -1) {
+          const temp = [...prev]
+          temp[index] = value
+
+          return temp
         }
 
         return [...prev, value]
@@ -43,12 +46,15 @@ export const ListContent = () => {
   useEffect(() => {
     const { unsubscribe } = getBoards((value) => {
       setBoards((prev) => {
-        const existingBoard = prev?.[value.epicId]?.find(
+        const index = prev?.[value.epicId]?.findIndex(
           (board) => board.id === value.id,
         )
 
-        if (existingBoard) {
-          return prev
+        if (index !== -1 && index !== undefined) {
+          const temp = { ...prev }
+          temp[value.epicId][index] = value
+
+          return temp
         }
 
         return {

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 import { TaskManagementBoard, TaskManagementEpic } from '@/types'
 
-export type ModalType = 'createEpic' | 'createBoard'
+export type ModalType = 'createEpic' | 'createBoard' | 'editEpic' | 'editBoard'
 
 export interface ModalData {
   epic?: TaskManagementEpic
