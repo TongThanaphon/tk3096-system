@@ -47,8 +47,11 @@ export const CreateBoardModal = () => {
 
   const [options, setOptions] = useState<TaskManagementEpic[]>([])
 
-  const { type, onClose, open } = useModal()
   const { toast } = useToast()
+  const { type, onClose, open, data } = useModal()
+
+  const epic = data?.epic
+  const isOpen = open && type === 'createBoard'
 
   const form = useForm({
     resolver: zodResolver(createBoardSchema),
@@ -59,7 +62,6 @@ export const CreateBoardModal = () => {
     },
   })
 
-  const isOpen = open && type === 'createBoard'
   const loading = form.formState.isSubmitting
 
   const handleClose = () => {
@@ -107,6 +109,12 @@ export const CreateBoardModal = () => {
       unsubscribe()
     }
   }, [])
+
+  useEffect(() => {
+    if (data?.epic) {
+      form.setValue('epicId', data.epic.id)
+    }
+  }, [data, form])
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -156,7 +164,10 @@ export const CreateBoardModal = () => {
                     <FormLabel className='uppercase text-sm font-bold text-secondary/70'>
                       Epic <span className='text-rose-500'>*</span>
                     </FormLabel>
-                    <Select onValueChange={field.onChange}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className='bg-zinc-300/50 border-none focus-visible:ring-0 focus-visible:ring-offset-0'>
                           <SelectValue placeholder='Select the epic' />

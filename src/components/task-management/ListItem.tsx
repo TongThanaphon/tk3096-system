@@ -3,17 +3,17 @@
 import Image from 'next/image'
 import { Pencil1Icon, ArchiveIcon, PlusIcon } from '@radix-ui/react-icons'
 
-import { ModalType, useModal } from '@/hooks/useModal'
+import { ModalData, ModalType, useModal } from '@/hooks/useModal'
 
 import { ActionTooltip } from '@/components/common/ActionTooltip'
 
 import { cn } from '@/lib/utils'
 
+import { TaskManagementBoard, TaskManagementEpic } from '@/types'
+
 interface ListItemProps {
-  id: string
-  label: string
   type: 'Epic' | 'Board'
-  imageUrl?: string
+  data: TaskManagementEpic | TaskManagementBoard
 }
 
 const epicIcon = (label: string, imageUrl?: string) => {
@@ -29,14 +29,22 @@ const epicIcon = (label: string, imageUrl?: string) => {
 }
 
 export const ListItem = (props: ListItemProps) => {
-  const { id, label, type, imageUrl } = props
+  const { type, data } = props
 
   const { onOpen } = useModal()
 
-  const handleAction = (event: React.MouseEvent, action: ModalType) => {
+  const label = type === 'Epic' ? (data as TaskManagementEpic).name : data.name
+  const imageUrl =
+    type === 'Epic' ? (data as TaskManagementEpic).imageUrl : undefined
+
+  const handleAction = (
+    event: React.MouseEvent,
+    action: ModalType,
+    data: ModalData,
+  ) => {
     event.stopPropagation()
 
-    onOpen(action)
+    onOpen(action, data)
   }
 
   return (
@@ -64,7 +72,11 @@ export const ListItem = (props: ListItemProps) => {
           <ActionTooltip label='new' align='center'>
             <PlusIcon
               className='h-4 w-4'
-              onClick={(e) => handleAction(e, 'createBoard')}
+              onClick={(e) =>
+                handleAction(e, 'createBoard', {
+                  epic: data as TaskManagementEpic,
+                })
+              }
             />
           </ActionTooltip>
         )}

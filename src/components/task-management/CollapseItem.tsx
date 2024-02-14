@@ -27,19 +27,14 @@ export const CollapseItem = (props: CollapseItem) => {
     <Collapsible open={open} onOpenChange={setOpen}>
       <CollapsibleTrigger asChild>
         <button className='w-full'>
-          <ListItem
-            id={epic.id}
-            label={epic.name}
-            type='Epic'
-            imageUrl={epic.imageUrl}
-          />
+          <ListItem type='Epic' data={epic} />
         </button>
       </CollapsibleTrigger>
       <CollapsibleContent className='space-y-2 CollapsibleContent'>
         {boards &&
           boards[epic.id]?.map((board) => (
             <div key={board.id}>
-              <ListItem type='Board' label={board.name} id={board.id} />
+              <ListItem type='Board' data={board} />
             </div>
           ))}
       </CollapsibleContent>
