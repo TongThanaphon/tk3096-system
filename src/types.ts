@@ -15,3 +15,25 @@ export interface TaskManagementBoard {
   name: string
   description: string
 }
+
+export enum TaskStatus {
+  TODO,
+  IN_PROGRESS,
+  REVIEW,
+  DONE,
+}
+
+export interface TaskManagementTask {
+  id: string
+  title: string
+  description: string
+  status: TaskStatus
+  refs: string[]
+  score: number
+  createdAt: number
+  updatedAt: number
+}
+
+export interface TaskWithIndex {
+  [key: string]: TaskManagementTask[]
+}

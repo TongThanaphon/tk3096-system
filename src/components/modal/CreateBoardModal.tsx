@@ -40,7 +40,7 @@ import { useToast } from '@/hooks/useToast'
 
 import { getEpics } from '@/lib/firebase/db'
 
-import { TaskManagementEpic } from '@/types'
+import { APIResponse, TaskManagementEpic } from '@/types'
 
 export const CreateBoardModal = () => {
   const router = useRouter()
@@ -80,9 +80,11 @@ export const CreateBoardModal = () => {
         body: JSON.stringify(values),
       })
 
-      if (res.ok) {
+      const resBody = (await res.json()) as APIResponse<string>
+
+      if (res.ok && resBody.success) {
         handleClose()
-        router.refresh()
+        router.push(`/tasks-management/${values.epicId}/${resBody.data}`)
       } else {
         toast({
           title: 'Create board',

@@ -1,9 +1,5 @@
 const TaskManagementPage = () => {
-  return (
-    <div>
-      <div>task management</div>
-    </div>
-  )
+  return null
 }
 
 export default TaskManagementPage

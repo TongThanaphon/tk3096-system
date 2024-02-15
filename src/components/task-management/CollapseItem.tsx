@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { TaskManagementEpic } from '@/types'
 
@@ -21,7 +22,12 @@ interface CollapseItem {
 export const CollapseItem = (props: CollapseItem) => {
   const { epic, boards } = props
 
+  const router = useRouter()
   const [open, setOpen] = useState(false)
+
+  const handleClickBoardItem = (boardId: string) => {
+    router.push(`/tasks-management/${epic.id}/${boardId}`)
+  }
 
   return (
     <Collapsible open={open} onOpenChange={setOpen}>
@@ -30,12 +36,15 @@ export const CollapseItem = (props: CollapseItem) => {
           <ListItem type='Epic' data={epic} />
         </button>
       </CollapsibleTrigger>
-      <CollapsibleContent className='space-y-2 CollapsibleContent'>
+      <CollapsibleContent className='space-y-2 CollapsibleContent flex flex-col'>
         {boards &&
           boards[epic.id]?.map((board) => (
-            <div key={board.id}>
+            <button
+              key={board.id}
+              onClick={() => handleClickBoardItem(board.id)}
+            >
               <ListItem type='Board' data={board} />
-            </div>
+            </button>
           ))}
       </CollapsibleContent>
     </Collapsible>
