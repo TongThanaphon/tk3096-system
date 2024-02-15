@@ -1,16 +1,35 @@
 import 'server-only'
 
 import { cookies } from 'next/headers'
-import { getApps, cert, initializeApp } from 'firebase-admin/app'
+import {
+  getApps,
+  cert,
+  initializeApp,
+  ServiceAccount,
+} from 'firebase-admin/app'
 import { getAuth, SessionCookieOptions } from 'firebase-admin/auth'
 import { DocumentData, getFirestore } from 'firebase-admin/firestore'
 
 import { SESSION_KEY } from '@/lib/firebase/config/constant'
 
+const { privateKey } = JSON.parse(
+  process.env.NEXT_PUBLIC_FIREBASE_SDK_PRIVATE_KEY as string,
+)
+
 const config = {
-  credential: cert(
-    process.cwd() + '/' + process.env.NEXT_PUBLIC_FIREBASE_ADMIN_CONFIG,
-  ),
+  credential: cert({
+    type: process.env.NEXT_PUBLIC_FIREBASE_SDK_TYPE,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_SDK_PROJECT_ID,
+    privateKeyId: process.env.NEXT_PUBLIC_FIREBASE_SDK_PRIVATE_KEY_ID,
+    privateKey: privateKey,
+    clientEmail: process.env.NEXT_PUBLIC_FIREBASE_SDK_CLIENT_EMAIL,
+    clientId: process.env.NEXT_PUBLIC_FIREBASE_SDK_CLIENT_ID,
+    authUri: process.env.NEXT_PUBLIC_FIREBASE_SDK_AUTH_URI,
+    tokenUri: process.env.NEXT_PUBLIC_FIREBASE_SDK_TOKEN_URI,
+    authProviderX509CertUrl: process.env.NEXT_PUBLIC_FIREBASE_SDK_AUTH_PROVIDER,
+    clientX509CertUrl: process.env.NEXT_PUBLIC_FIREBASE_SDK_CLIENT_CERT_URL,
+    universalDomain: process.env.NEXT_PUBLIC_FIREBASE_SDK_UNIVERSAL_DOMAIN,
+  } as ServiceAccount),
 }
 
 export const app = !getApps().length
